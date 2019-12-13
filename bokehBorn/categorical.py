@@ -330,7 +330,7 @@ class _CategoricalPlotter(object):
             width = self.width
         return width
 
-    def annotate_axes(self, ax):
+    def annotate_axes(self, bf):
         """Add descriptive labels to an Axes object."""
         if self.orient == "v":
             xlabel, ylabel = self.group_label, self.value_label
@@ -338,38 +338,45 @@ class _CategoricalPlotter(object):
             xlabel, ylabel = self.value_label, self.group_label
 
         if xlabel is not None:
-            ax.set_xlabel(xlabel)
+            # ax.set_xlabel(xlabel)
+            bf.xaxis.axis_label = xlabel
+
+
         if ylabel is not None:
-            ax.set_ylabel(ylabel)
+            bf.yaxis.axis_label = ylabel
 
-        if self.orient == "v":
-            ax.set_xticks(np.arange(len(self.plot_data)))
-            ax.set_xticklabels(self.group_names)
-        else:
-            ax.set_yticks(np.arange(len(self.plot_data)))
-            ax.set_yticklabels(self.group_names)
+        return bf
 
-        if self.orient == "v":
-            ax.xaxis.grid(False)
-            ax.set_xlim(-.5, len(self.plot_data) - .5, auto=None)
-        else:
-            ax.yaxis.grid(False)
-            ax.set_ylim(-.5, len(self.plot_data) - .5, auto=None)
 
-        if self.hue_names is not None:
-            leg = ax.legend(loc="best")
-            if self.hue_title is not None:
-                leg.set_title(self.hue_title)
-
-                # Set the title size a roundabout way to maintain
-                # compatibility with matplotlib 1.1
-                # TODO no longer needed
-                try:
-                    title_size = mpl.rcParams["axes.labelsize"] * .85
-                except TypeError:  # labelsize is something like "large"
-                    title_size = mpl.rcParams["axes.labelsize"]
-                prop = mpl.font_manager.FontProperties(size=title_size)
-                leg._legend_title_box._text.set_font_properties(prop)
+        #
+        # if self.orient == "v":
+        #     ax.set_xticks(np.arange(len(self.plot_data)))
+        #     ax.set_xticklabels(self.group_names)
+        # else:
+        #     ax.set_yticks(np.arange(len(self.plot_data)))
+        #     ax.set_yticklabels(self.group_names)
+        #
+        # if self.orient == "v":
+        #     ax.xaxis.grid(False)
+        #     ax.set_xlim(-.5, len(self.plot_data) - .5, auto=None)
+        # else:
+        #     ax.yaxis.grid(False)
+        #     ax.set_ylim(-.5, len(self.plot_data) - .5, auto=None)
+        #
+        # if self.hue_names is not None:
+        #     leg = ax.legend(loc="best")
+        #     if self.hue_title is not None:
+        #         leg.set_title(self.hue_title)
+        #
+        #         # Set the title size a roundabout way to maintain
+        #         # compatibility with matplotlib 1.1
+        #         # TODO no longer needed
+        #         try:
+        #             title_size = mpl.rcParams["axes.labelsize"] * .85
+        #         except TypeError:  # labelsize is something like "large"
+        #             title_size = mpl.rcParams["axes.labelsize"]
+        #         prop = mpl.font_manager.FontProperties(size=title_size)
+        #         leg._legend_title_box._text.set_font_properties(prop)
 
     def add_legend_data(self, ax, color, label):
         """Add a dummy patch object so we can get legend data."""
@@ -561,23 +568,17 @@ class _BarPlotter(_CategoricalStatPlotter):
 
                 bf.vbar(x=self.group_names, top=self.statistic, width=0.7)
 
-                bf.xgrid.grid_line_color = None
-                bf.xaxis.axis_label = self.group_label
-                bf.yaxis.axis_label = self.value_label
 
-                show(bf)
+
+                return bf
 
             else:
                 bf = figure(y_range=self.group_names, plot_height=350, plot_width=600)
 
                 bf.hbar(y=self.group_names, right=self.statistic, height=0.7)
 
-                #
-                # bf.xgrid.grid_line_color = None
-                # bf.xaxis.axis_label = self.group_label
-                # bf.yaxis.axis_label = self.value_label
 
-                show(bf)
+                return bf
 
 
 
@@ -618,9 +619,12 @@ class _BarPlotter(_CategoricalStatPlotter):
 
     def plot(self, kwargs):
         """Make the plot."""
-        self.draw_bars(kwargs)
-        #
-        # self.annotate_axes(ax)
+        bf = self.draw_bars(kwargs)
+
+        bf = self.annotate_axes(bf)
+
+        show(bf)
+
         # if self.orient == "h":
         #     ax.invert_yaxis()
 
