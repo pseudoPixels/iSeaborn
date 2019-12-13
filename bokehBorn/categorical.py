@@ -560,9 +560,13 @@ class _BarPlotter(_CategoricalStatPlotter):
 
         if self.plot_hues is None:
 
-            p = figure(x_range=self.group_names, plot_height=250)
+            p = figure(x_range=self.group_names, plot_height=450, plot_width=900)
 
             p.vbar(x=self.group_names, top=self.statistic, width=0.7)
+
+            p.xgrid.grid_line_color = None
+            p.xaxis.axis_label = self.group_label
+            p.yaxis.axis_label = self.value_label
 
             show(p)
 
