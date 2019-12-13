@@ -12,8 +12,8 @@ import warnings
 
 from bokeh.io import show, output_file
 from bokeh.plotting import figure
-
-
+from bokeh.io import output_notebook
+from bokeh.models.ranges import FactorRange
 
 from .external.six import string_types
 # from .external.six.moves import range
@@ -155,6 +155,8 @@ class _CategoricalPlotter(object):
 
             # Figure out the plotting orientation
             orient = self.infer_orient(x, y, orient)
+
+
 
             # Option 2a:
             # We are plotting a single set of data
@@ -545,30 +547,38 @@ class _BarPlotter(_CategoricalStatPlotter):
         self.errwidth = errwidth
         self.capsize = capsize
 
-    def draw_bars(self):
+    def draw_bars(self, bar_kwargs):
         """Draw the bars onto `ax`."""
         # Get the right matplotlib function depending on the orientation
-        # barfunc = ax.bar if self.orient == "v" else ax.barh
-        barpos = np.arange(len(self.statistic))
 
-        barpos = [str(a) for a in barpos]
-
-        print(barpos)
-        print(self.statistic)
-
+        bf = ''
 
 
         if self.plot_hues is None:
 
-            p = figure(x_range=self.group_names, plot_height=450, plot_width=900)
+            if self.orient == "v":
+                bf = figure(x_range=self.group_names, plot_height=350, plot_width=600)
 
-            p.vbar(x=self.group_names, top=self.statistic, width=0.7)
+                bf.vbar(x=self.group_names, top=self.statistic, width=0.7)
 
-            p.xgrid.grid_line_color = None
-            p.xaxis.axis_label = self.group_label
-            p.yaxis.axis_label = self.value_label
+                bf.xgrid.grid_line_color = None
+                bf.xaxis.axis_label = self.group_label
+                bf.yaxis.axis_label = self.value_label
 
-            show(p)
+                show(bf)
+
+            else:
+                bf = figure(y_range=self.group_names, plot_height=350, plot_width=600)
+
+                bf.hbar(y=self.group_names, right=self.statistic, height=0.7)
+
+                #
+                # bf.xgrid.grid_line_color = None
+                # bf.xaxis.axis_label = self.group_label
+                # bf.yaxis.axis_label = self.value_label
+
+                show(bf)
+
 
 
             #
@@ -606,9 +616,9 @@ class _BarPlotter(_CategoricalStatPlotter):
                                        self.errwidth,
                                        self.capsize)
 
-    def plot(self):
+    def plot(self, kwargs):
         """Make the plot."""
-        self.draw_bars()
+        self.draw_bars(kwargs)
         #
         # self.annotate_axes(ax)
         # if self.orient == "h":
@@ -621,16 +631,13 @@ def barplot(x=None, y=None, hue=None, data=None, order=None, hue_order=None,
             estimator=np.mean, ci=95, n_boot=1000, units=None,
             orient=None, color=None, palette=None, saturation=.75,
             errcolor=".26", errwidth=None, capsize=None, dodge=True,
-            ax=None, **kwargs):
+            bokehFigure=None, **kwargs):
 
     plotter = _BarPlotter(x, y, hue, data, order, hue_order,
                           estimator, ci, n_boot, units,
                           orient, color, palette, saturation,
                           errcolor, errwidth, capsize, dodge)
 
-    # if ax is None:
-    #     ax = plt.gca()
-
-    plotter.plot()
-    return ax
+    plotter.plot(kwargs)
+    return bokehFigure
 

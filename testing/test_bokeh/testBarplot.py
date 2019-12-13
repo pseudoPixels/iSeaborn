@@ -14,15 +14,15 @@ tips.to_csv('tips.csv')
 
 output_file("bokeh_test.html")
 
-fruits = ['1', '2', '3']
-counts = [5, 3, 4]
+fruits = ['Thur', 'Fri', 'Sat', 'Sun']
+counts = [5, 3, 4, 2, 4, 6]
 
-p = figure(x_range=fruits, plot_height=250)
-#
-# p.vbar(x=fruits, top=counts, width=0.7)
-#
-# p.xgrid.grid_line_color = None
-# p.xaxis.axis_label = "day"
-# p.yaxis.axis_label = "total_bill"
-#
-# show(p)
+p = figure(y_range=agg['day'].tolist(), plot_height=250)
+
+p.hbar(y=agg['day'], height=0.5, right=agg['total_bill'])
+
+p.xgrid.grid_line_color = None
+p.xaxis.axis_label = "day"
+p.yaxis.axis_label = "total_bill"
+
+show(p)
