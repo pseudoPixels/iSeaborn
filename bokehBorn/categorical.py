@@ -25,6 +25,8 @@ from .utils import iqr, categorical_order, remove_na
 from .algorithms import bootstrap
 from .palettes import color_palette, husl_palette, light_palette, dark_palette
 
+from bokehBorn.utils import conv_norm_rgb_to_bokeh_RGB
+
 
 
 __all__ = ["barplot"]
@@ -628,29 +630,14 @@ class _BarPlotter(_CategoricalStatPlotter):
             if self.orient == "v":
                 bf = figure(x_range=self.group_names, plot_height=350, plot_width=600)
 
-
-                conv = []
-                for aColor in self.colors:
-                    # c = ( int(aColor[0]*255), int(aColor[1]*255), int(aColor[2]*255) )
-                    obj = RGB(int(aColor[0]*255), int(aColor[1]*255), int(aColor[2]*255))
-                    conv.append(obj)
-                self.colors = conv
-
-
-
-
-                bf.vbar(x=self.group_names, top=self.statistic, width=0.7, fill_color=conv)
-
-
-
-
+                bf.vbar(x=self.group_names, top=self.statistic, width=0.7, fill_color=conv_norm_rgb_to_bokeh_RGB(self.colors), line_color=conv_norm_rgb_to_bokeh_RGB(self.colors))
 
                 return bf
 
             else:
                 bf = figure(y_range=self.group_names, plot_height=350, plot_width=600)
 
-                bf.hbar(y=self.group_names, right=self.statistic, height=0.7)
+                bf.hbar(y=self.group_names, right=self.statistic, height=0.7, fill_color=conv_norm_rgb_to_bokeh_RGB(self.colors), line_color=conv_norm_rgb_to_bokeh_RGB(self.colors))
 
 
                 return bf

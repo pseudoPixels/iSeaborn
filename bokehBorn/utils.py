@@ -10,12 +10,13 @@ import matplotlib as mpl
 import matplotlib.colors as mplcol
 import matplotlib.pyplot as plt
 
+from bokeh.colors.rgb import RGB
+
 from .external.six.moves.urllib.request import urlopen, urlretrieve
 from .external.six.moves.http_client import HTTPException
 
 
-__all__ = ["desaturate", "saturate", "set_hls_values",
-           "despine", "get_dataset_names", "load_dataset"]
+# __all__ = ["desaturate", "saturate", "set_hls_values","despine", "get_dataset_names", "load_dataset"]
 
 
 def remove_na(arr):
@@ -655,3 +656,23 @@ def _network(t=None, url='https://google.com'):
             f.close()
             return t(*args, **kwargs)
     return wrapper
+
+
+def conv_norm_rgb_to_bokeh_RGB(list_of_colors):
+    """
+    Converts list normalized rgb color tuple [(.3, 0.5, 0.7), (.8, 0.1, 0.7)] to bokeh RGB list of color objects [RGB(255, 10, 34), RGB(8, 789, 7)]
+
+    Parameters
+    ----------
+    list_of_colors : list of normalized rgb color tuple
+
+    returns: list of bokeh RGB color objects
+    """
+
+    conv = []
+    for aColor in list_of_colors:
+
+        obj = RGB(int(aColor[0] * 255), int(aColor[1] * 255), int(aColor[2] * 255))
+        conv.append(obj)
+
+    return conv
