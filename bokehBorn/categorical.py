@@ -673,7 +673,7 @@ class _BarPlotter(_CategoricalStatPlotter):
             for j, hue_level in enumerate(self.hue_names):
 
                 # Draw the bars
-                offpos = barpos + self.hue_offsets[j]
+                offpos = barpos + self.hue_offsets[j] + .5 #.5 center alignment
                 bf.vbar(x=offpos, top=self.statistic[:, j], fill_color=conv_norm_rgb_to_bokeh_RGB(self.colors)[j], width=self.nested_width)
 
 
