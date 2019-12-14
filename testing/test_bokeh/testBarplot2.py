@@ -18,11 +18,11 @@ fruits = ['1', '2', '3']
 counts = [5, 3, 4]
 
 p = figure(x_range=fruits, plot_height=250)
-#
-# p.vbar(x=fruits, top=counts, width=0.7)
-#
-# p.xgrid.grid_line_color = None
-# p.xaxis.axis_label = "day"
-# p.yaxis.axis_label = "total_bill"
+
+p.vbar(x=[0, 1.5, 2, 3, 4, 5], top=[1, 2, 3, 4, 5, 6], width=.9)
+
+p.xgrid.grid_line_color = None
+p.xaxis.axis_label = "day"
+p.yaxis.axis_label = "total_bill"
 #
 show(p)

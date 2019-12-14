@@ -11,9 +11,10 @@ import matplotlib.pyplot as plt
 import warnings
 
 from bokeh.io import show, output_file
-from bokeh.plotting import figure
+from bokeh.plotting import figure, ColumnDataSource
 from bokeh.io import output_notebook
 from bokeh.models.ranges import FactorRange
+from bokeh.models import HoverTool
 
 from bokeh.colors.rgb import RGB
 
@@ -409,6 +410,9 @@ class _CategoricalPlotter(object):
         if ylabel is not None:
             bf.yaxis.axis_label = ylabel
 
+
+        bf.add_tools(HoverTool())
+
         return bf
 
 
@@ -606,6 +610,8 @@ class _BarPlotter(_CategoricalStatPlotter):
                  estimator, ci, n_boot, units,
                  orient, color, palette, saturation, errcolor,
                  errwidth, capsize, dodge):
+
+
         """Initialize the plotter."""
         self.establish_variables(x, y, hue, data, orient,
                                  order, hue_order, units)
@@ -618,12 +624,14 @@ class _BarPlotter(_CategoricalStatPlotter):
         self.errwidth = errwidth
         self.capsize = capsize
 
-    def draw_bars(self, bar_kwargs):
+
+
+    def draw_bars(self, kwargs):
         """Draw the bars onto `ax`."""
         # Get the right matplotlib function depending on the orientation
+        barpos = np.arange(len(self.statistic))
 
         bf = ''
-
 
         if self.plot_hues is None:
 
@@ -642,8 +650,6 @@ class _BarPlotter(_CategoricalStatPlotter):
 
                 return bf
 
-
-
             #
             # # Draw the bars
             # barfunc(barpos, self.statistic, self.width,
@@ -660,24 +666,22 @@ class _BarPlotter(_CategoricalStatPlotter):
 
         else:
 
+
+            bf = figure(x_range=self.group_names, plot_height=350, plot_width=600)
+
+
             for j, hue_level in enumerate(self.hue_names):
 
                 # Draw the bars
                 offpos = barpos + self.hue_offsets[j]
-                barfunc(offpos, self.statistic[:, j], self.nested_width,
-                        color=self.colors[j], align="center",
-                        label=hue_level, **kws)
+                bf.vbar(x=offpos, top=self.statistic[:, j], fill_color=conv_norm_rgb_to_bokeh_RGB(self.colors)[j], width=self.nested_width)
 
-                # Draw the confidence intervals
-                if self.confint.size:
-                    confint = self.confint[:, j]
-                    errcolors = [self.errcolor] * len(offpos)
-                    self.draw_confints(ax,
-                                       offpos,
-                                       confint,
-                                       errcolors,
-                                       self.errwidth,
-                                       self.capsize)
+
+
+            return bf
+
+
+
 
     def plot(self, kwargs):
         """Make the plot."""
