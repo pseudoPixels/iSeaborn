@@ -15,12 +15,15 @@ from bokeh.plotting import figure
 from bokeh.io import output_notebook
 from bokeh.models.ranges import FactorRange
 
+from bokeh.colors.rgb import RGB
+
 from .external.six import string_types
 # from .external.six.moves import range
 
 from . import utils
 from .utils import iqr, categorical_order, remove_na
 from .algorithms import bootstrap
+from .palettes import color_palette, husl_palette, light_palette, dark_palette
 
 
 
@@ -261,6 +264,65 @@ class _CategoricalPlotter(object):
 
         return out_data, label
 
+
+    def establish_colors(self, color, palette, saturation):
+        """Get a list of colors for the main component of the plots."""
+        if self.hue_names is None:
+            n_colors = len(self.plot_data)
+        else:
+            n_colors = len(self.hue_names)
+
+        # Determine the main colors
+        if color is None and palette is None:
+            # Determine whether the current palette will have enough values
+            # If not, we'll default to the husl palette so each is distinct
+            current_palette = utils.get_color_cycle()
+            if n_colors <= len(current_palette):
+                colors = color_palette(n_colors=n_colors)
+            else:
+                colors = husl_palette(n_colors, l=.7)  # noqa
+
+        elif palette is None:
+            # When passing a specific color, the interpretation depends
+            # on whether there is a hue variable or not.
+            # If so, we will make a blend palette so that the different
+            # levels have some amount of variation.
+            if self.hue_names is None:
+                colors = [color] * n_colors
+            else:
+                if self.default_palette == "light":
+                    colors = light_palette(color, n_colors)
+                elif self.default_palette == "dark":
+                    colors = dark_palette(color, n_colors)
+                else:
+                    raise RuntimeError("No default palette specified")
+        else:
+
+            # Let `palette` be a dict mapping level to color
+            if isinstance(palette, dict):
+                if self.hue_names is None:
+                    levels = self.group_names
+                else:
+                    levels = self.hue_names
+                palette = [palette[l] for l in levels]
+
+            colors = color_palette(palette, n_colors)
+
+        # Desaturate a bit because these are patches
+        if saturation < 1:
+            colors = color_palette(colors, desat=saturation)
+
+        # Conver the colors to a common representations
+        rgb_colors = color_palette(colors)
+
+        # Determine the gray color to use for the lines framing the plot
+        light_vals = [colorsys.rgb_to_hls(*c)[1] for c in rgb_colors]
+        lum = min(light_vals) * .6
+        gray = mpl.colors.rgb2hex((lum, lum, lum))
+
+        # Assign object attributes
+        self.colors = rgb_colors
+        self.gray = gray
 
 
     def infer_orient(self, x, y, orient=None):
@@ -545,7 +607,7 @@ class _BarPlotter(_CategoricalStatPlotter):
         """Initialize the plotter."""
         self.establish_variables(x, y, hue, data, orient,
                                  order, hue_order, units)
-        # self.establish_colors(color, palette, saturation)
+        self.establish_colors(color, palette, saturation)
         self.estimate_statistic(estimator, ci, n_boot)
 
         self.dodge = dodge
@@ -566,7 +628,20 @@ class _BarPlotter(_CategoricalStatPlotter):
             if self.orient == "v":
                 bf = figure(x_range=self.group_names, plot_height=350, plot_width=600)
 
-                bf.vbar(x=self.group_names, top=self.statistic, width=0.7)
+
+                conv = []
+                for aColor in self.colors:
+                    # c = ( int(aColor[0]*255), int(aColor[1]*255), int(aColor[2]*255) )
+                    obj = RGB(int(aColor[0]*255), int(aColor[1]*255), int(aColor[2]*255))
+                    conv.append(obj)
+                self.colors = conv
+
+
+
+
+                bf.vbar(x=self.group_names, top=self.statistic, width=0.7, fill_color=conv)
+
+
 
 
 

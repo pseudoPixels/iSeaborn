@@ -3,6 +3,6 @@ from bokehBorn.categorical import barplot
 
 tips = sns.load_dataset("tips")
 
-barplot(x="day", y="total_bill", data=tips)
+barplot(x="day", y="total_bill", data=tips, palette="Blues_d")
 
 
