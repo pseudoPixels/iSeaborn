@@ -17,7 +17,7 @@ output_file("bokeh_test.html")
 fruits = ['1', '2', '3']
 counts = [5, 3, 4]
 
-p = figure(x_range=fruits, plot_height=250)
+p = figure(x_range=fruits, plot_height=250, title="Title Fig")
 
 p.vbar(x=[0, 1.5, 2, 3, 4, 5], top=[1, 2, 3, 4, 5, 6], width=.9)
 

@@ -609,7 +609,7 @@ class _BarPlotter(_CategoricalStatPlotter):
     def __init__(self, x, y, hue, data, order, hue_order,
                  estimator, ci, n_boot, units,
                  orient, color, palette, saturation, errcolor,
-                 errwidth, capsize, dodge):
+                 errwidth, capsize, dodge, plot_width, plot_height, plot_title):
 
 
         """Initialize the plotter."""
@@ -624,6 +624,9 @@ class _BarPlotter(_CategoricalStatPlotter):
         self.errwidth = errwidth
         self.capsize = capsize
 
+        self.plot_width = plot_width
+        self.plot_height = plot_height
+        self.plot_title = plot_title
 
 
     def draw_bars(self, kwargs):
@@ -636,14 +639,14 @@ class _BarPlotter(_CategoricalStatPlotter):
         if self.plot_hues is None:
 
             if self.orient == "v":
-                bf = figure(x_range=self.group_names, plot_height=350, plot_width=600)
+                bf = figure(x_range=self.group_names, plot_height=self.plot_height, plot_width=self.plot_width, title=self.plot_title)
 
-                bf.vbar(x=self.group_names, top=self.statistic, width=0.7, fill_color=conv_norm_rgb_to_bokeh_RGB(self.colors), line_color=conv_norm_rgb_to_bokeh_RGB(self.colors))
+                bf.vbar(x=self.group_names, top=self.statistic, width=0.7, fill_color=conv_norm_rgb_to_bokeh_RGB(self.colors), line_color=conv_norm_rgb_to_bokeh_RGB(self.colors), **kwargs)
 
                 return bf
 
             else:
-                bf = figure(y_range=self.group_names, plot_height=350, plot_width=600)
+                bf = figure(y_range=self.group_names, plot_height=self.plot_height, plot_width=self.plot_width, title=self.plot_title)
 
                 bf.hbar(y=self.group_names, right=self.statistic, height=0.7, fill_color=conv_norm_rgb_to_bokeh_RGB(self.colors), line_color=conv_norm_rgb_to_bokeh_RGB(self.colors))
 
@@ -667,14 +670,14 @@ class _BarPlotter(_CategoricalStatPlotter):
         else:
 
 
-            bf = figure(x_range=self.group_names, plot_height=350, plot_width=600)
+            bf = figure(x_range=self.group_names, plot_height=self.plot_height, plot_width=self.plot_width, title=self.plot_title)
 
 
             for j, hue_level in enumerate(self.hue_names):
 
                 # Draw the bars
                 offpos = barpos + self.hue_offsets[j] + .5 #.5 center alignment
-                bf.vbar(x=offpos, top=self.statistic[:, j], fill_color=conv_norm_rgb_to_bokeh_RGB(self.colors)[j], width=self.nested_width)
+                bf.vbar(x=offpos, top=self.statistic[:, j], fill_color=conv_norm_rgb_to_bokeh_RGB(self.colors)[j], line_color=conv_norm_rgb_to_bokeh_RGB(self.colors)[j], width=self.nested_width)
 
 
 
@@ -701,12 +704,12 @@ def barplot(x=None, y=None, hue=None, data=None, order=None, hue_order=None,
             estimator=np.mean, ci=95, n_boot=1000, units=None,
             orient=None, color=None, palette=None, saturation=.75,
             errcolor=".26", errwidth=None, capsize=None, dodge=True,
-            bokehFigure=None, **kwargs):
+            bokehFigure=None, plot_width=600, plot_height=350, plot_title="", **kwargs):
 
     plotter = _BarPlotter(x, y, hue, data, order, hue_order,
                           estimator, ci, n_boot, units,
                           orient, color, palette, saturation,
-                          errcolor, errwidth, capsize, dodge)
+                          errcolor, errwidth, capsize, dodge, plot_width, plot_height, plot_title)
 
     plotter.plot(kwargs)
     return bokehFigure
