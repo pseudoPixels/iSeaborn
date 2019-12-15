@@ -8,7 +8,9 @@ setup(name='bokehBorn',
       license='',
       packages=find_packages(),
       zip_safe=False,
-      install_requires=['pandas',
+      install_requires=[
+        'pandas',
         'bokeh==1.4.0',
-        'numpy']
+        'numpy',
+        'seaborn']
       )
