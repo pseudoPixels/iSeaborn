@@ -658,11 +658,6 @@ class _BarPlotter(_CategoricalStatPlotter):
                 df = pd.DataFrame(dataDict)
                 source2 = ColumnDataSource(data=df)
 
-                print(df.head())
-
-                # bf = figure(x_range=df['day'].tolist(), plot_height=self.plot_height, plot_width=self.plot_width, title=self.plot_title)
-                #
-                # bf.vbar(x='day', top='total_bill',  width=0.7, fill_color=conv_norm_rgb_to_bokeh_RGB(self.colors), line_color=conv_norm_rgb_to_bokeh_RGB(self.colors), source=source2)
 
                 bf = figure(x_range=self.group_names, plot_height=self.plot_height, plot_width=self.plot_width, title=self.plot_title)
 
@@ -671,7 +666,8 @@ class _BarPlotter(_CategoricalStatPlotter):
                        source=source2,
                        fill_alpha=0.5,
                        fill_color='fill_color',
-                       line_color='line_color'
+                       line_color='line_color',
+                       **kwargs
                        )
 
 

@@ -1,8 +1,7 @@
-import seaborn as sns
-from bokehBorn.categorical import barplot
+import bokehBorn as bb
 
-tips = sns.load_dataset("tips")
 
-# barplot(x="day", y="total_bill", data=tips, palette="Blues_d")
-barplot(x="day", y="total_bill", data=tips)
+tips = bb.load_dataset("tips")
+
+bb.barplot(x="day", y="total_bill", data=tips, palette="Blues_d", alpha=1.0)
 

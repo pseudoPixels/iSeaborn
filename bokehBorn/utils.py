@@ -16,7 +16,7 @@ from .external.six.moves.urllib.request import urlopen, urlretrieve
 from .external.six.moves.http_client import HTTPException
 
 
-# __all__ = ["desaturate", "saturate", "set_hls_values","despine", "get_dataset_names", "load_dataset"]
+__all__ = ["desaturate", "saturate", "set_hls_values","despine", "get_dataset_names", "load_dataset"]
 
 
 def remove_na(arr):
