@@ -1,16 +1,15 @@
-.. bokehBorn documentation master file, created by
-   sphinx-quickstart on Fri Dec 13 18:21:46 2019.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+bokehBorn: Interactive Statistical Data Visualization
+=====================================================
 
-Welcome to bokehBorn's documentation!
-=====================================
+
+
+
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-
+   Tutorials <sections/tutorials/Categorical_Plots/categorical_plots>
 
 Indices and tables
 ==================
