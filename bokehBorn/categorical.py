@@ -616,7 +616,7 @@ class _BarPlotter(_CategoricalStatPlotter):
     def __init__(self, x, y, hue, data, order, hue_order,
                  estimator, ci, n_boot, units,
                  orient, color, palette, saturation, errcolor,
-                 errwidth, capsize, dodge, plot_width, plot_height, plot_title):
+                 errwidth, capsize, dodge, plot_width, plot_height, plot_title, tools):
 
 
         """Initialize the plotter."""
@@ -636,6 +636,7 @@ class _BarPlotter(_CategoricalStatPlotter):
         self.plot_title = plot_title
         self.x = x
         self.y = y
+        self.tools = tools
 
 
 
@@ -648,22 +649,22 @@ class _BarPlotter(_CategoricalStatPlotter):
         bf = ''
 
         if self.plot_hues is None:
+            dataDict = {self.x: self.group_names,
+                        self.y: self.statistic,
+                        'fill_color': conv_norm_rgb_to_bokeh_RGB(self.colors),
+                        'line_color': conv_norm_rgb_to_bokeh_RGB(self.colors)
+                        }
+            df = pd.DataFrame(dataDict)
+            dataSource = ColumnDataSource(data=df)
 
             if self.orient == "v":
-                dataDict = {self.x: self.group_names,
-                            self.y:self.statistic,
-                            'fill_color':conv_norm_rgb_to_bokeh_RGB(self.colors),
-                            'line_color' : conv_norm_rgb_to_bokeh_RGB(self.colors)
-                            }
-                df = pd.DataFrame(dataDict)
-                source2 = ColumnDataSource(data=df)
 
+                bf = figure(x_range=self.group_names, plot_height=self.plot_height, plot_width=self.plot_width, title=self.plot_title, tools=self.tools)
 
-                bf = figure(x_range=self.group_names, plot_height=self.plot_height, plot_width=self.plot_width, title=self.plot_title)
-
-                bf.vbar(x=self.x, top=self.y,
+                bf.vbar(x=self.x,
+                       top=self.y,
                        width=0.7,
-                       source=source2,
+                       source=dataSource,
                        fill_alpha=0.5,
                        fill_color='fill_color',
                        line_color='line_color',
@@ -672,13 +673,7 @@ class _BarPlotter(_CategoricalStatPlotter):
 
 
                 hover = HoverTool()
-                # hover.tooltips = "<div><h3>"+ self.x +": @" + self.x + "</h3><h3>" + self.y +": @" + self.x + "</h3></div>"
 
-                # bf.xgrid.grid_line_color = None
-                # bf.xaxis.axis_label = "day"
-                # bf.yaxis.axis_label = "total_bill"
-
-                h = self.y
                 hover.tooltips = [
                     (self.x, "@"+self.x),
                     (self.y, "@"+self.y)
@@ -689,31 +684,41 @@ class _BarPlotter(_CategoricalStatPlotter):
                 return bf
 
             else:
-                bf = figure(y_range=self.group_names, plot_height=self.plot_height, plot_width=self.plot_width, title=self.plot_title)
+                bf = figure(y_range=self.group_names,
+                            plot_height=self.plot_height,
+                            plot_width=self.plot_width,
+                            title=self.plot_title,
+                            tools=self.tools)
 
-                bf.hbar(y=self.group_names, right=self.statistic, height=0.7, fill_color=conv_norm_rgb_to_bokeh_RGB(self.colors), line_color=conv_norm_rgb_to_bokeh_RGB(self.colors))
+                bf.hbar(y=self.x,
+                        right=self.y,
+                        height=0.7,
+                        fill_color='fill_color',
+                        line_color='line_color',
+                        source=dataSource,
+                        **kwargs
+                        )
+                hover = HoverTool()
+
+                hover.tooltips = [
+                    (self.x, "@"+self.y),
+                    (self.y, "@"+self.x)
+                ]
+                bf.add_tools(hover)
+
 
 
                 return bf
 
-            #
-            # # Draw the bars
-            # barfunc(barpos, self.statistic, self.width,
-            #         color=self.colors, align="center", **kws)
-            #
-            # # Draw the confidence intervals
-            # errcolors = [self.errcolor] * len(barpos)
-            # self.draw_confints(ax,
-            #                    barpos,
-            #                    self.confint,
-            #                    errcolors,
-            #                    self.errwidth,
-            #                    self.capsize)
 
         else:
 
 
-            bf = figure(x_range=self.group_names, plot_height=self.plot_height, plot_width=self.plot_width, title=self.plot_title)
+            bf = figure(x_range=self.group_names,
+                        plot_height=self.plot_height,
+                        plot_width=self.plot_width,
+                        title=self.plot_title,
+                        tools = self.tools)
 
 
             for j, hue_level in enumerate(self.hue_names):
@@ -747,12 +752,12 @@ def barplot(x=None, y=None, hue=None, data=None, order=None, hue_order=None,
             estimator=np.mean, ci=95, n_boot=1000, units=None,
             orient=None, color=None, palette=None, saturation=.75,
             errcolor=".26", errwidth=None, capsize=None, dodge=True,
-            bokehFigure=None, plot_width=600, plot_height=350, plot_title="", **kwargs):
+            bokehFigure=None, plot_width=600, plot_height=350, plot_title="", tools="pan,box_select,wheel_zoom,box_zoom,reset,save", **kwargs):
 
     plotter = _BarPlotter(x, y, hue, data, order, hue_order,
                           estimator, ci, n_boot, units,
                           orient, color, palette, saturation,
-                          errcolor, errwidth, capsize, dodge, plot_width, plot_height, plot_title)
+                          errcolor, errwidth, capsize, dodge, plot_width, plot_height, plot_title, tools)
 
     plotter.plot(kwargs)
     return bokehFigure
