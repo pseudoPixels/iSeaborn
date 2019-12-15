@@ -410,8 +410,15 @@ class _CategoricalPlotter(object):
         if ylabel is not None:
             bf.yaxis.axis_label = ylabel
 
+        # hover = HoverTool()
+        # hover.tooltips = """
+        #     <div>
+        #         <h3>@day</h3>
+        #         <div><strong>Total Bill: </strong>@total_bill</div>
+        #     </div>
+        # """
 
-        bf.add_tools(HoverTool())
+        # bf.add_tools(hover)
 
         return bf
 
@@ -627,6 +634,10 @@ class _BarPlotter(_CategoricalStatPlotter):
         self.plot_width = plot_width
         self.plot_height = plot_height
         self.plot_title = plot_title
+        self.x = x
+        self.y = y
+
+
 
 
     def draw_bars(self, kwargs):
@@ -639,9 +650,45 @@ class _BarPlotter(_CategoricalStatPlotter):
         if self.plot_hues is None:
 
             if self.orient == "v":
+                dataDict = {self.x: self.group_names,
+                            self.y:self.statistic,
+                            'fill_color':conv_norm_rgb_to_bokeh_RGB(self.colors),
+                            'line_color' : conv_norm_rgb_to_bokeh_RGB(self.colors)
+                            }
+                df = pd.DataFrame(dataDict)
+                source2 = ColumnDataSource(data=df)
+
+                print(df.head())
+
+                # bf = figure(x_range=df['day'].tolist(), plot_height=self.plot_height, plot_width=self.plot_width, title=self.plot_title)
+                #
+                # bf.vbar(x='day', top='total_bill',  width=0.7, fill_color=conv_norm_rgb_to_bokeh_RGB(self.colors), line_color=conv_norm_rgb_to_bokeh_RGB(self.colors), source=source2)
+
                 bf = figure(x_range=self.group_names, plot_height=self.plot_height, plot_width=self.plot_width, title=self.plot_title)
 
-                bf.vbar(x=self.group_names, top=self.statistic, width=0.7, fill_color=conv_norm_rgb_to_bokeh_RGB(self.colors), line_color=conv_norm_rgb_to_bokeh_RGB(self.colors), **kwargs)
+                bf.vbar(x=self.x, top=self.y,
+                       width=0.7,
+                       source=source2,
+                       fill_alpha=0.5,
+                       fill_color='fill_color',
+                       line_color='line_color'
+                       )
+
+
+                hover = HoverTool()
+                # hover.tooltips = "<div><h3>"+ self.x +": @" + self.x + "</h3><h3>" + self.y +": @" + self.x + "</h3></div>"
+
+                # bf.xgrid.grid_line_color = None
+                # bf.xaxis.axis_label = "day"
+                # bf.yaxis.axis_label = "total_bill"
+
+                h = self.y
+                hover.tooltips = [
+                    (self.x, "@"+self.x),
+                    (self.y, "@"+self.y)
+                ]
+                bf.add_tools(hover)
+
 
                 return bf
 
