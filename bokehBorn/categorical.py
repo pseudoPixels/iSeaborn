@@ -665,7 +665,6 @@ class _BarPlotter(_CategoricalStatPlotter):
                        top=self.y,
                        width=0.7,
                        source=dataSource,
-                       fill_alpha=0.5,
                        fill_color='fill_color',
                        line_color='line_color',
                        **kwargs
@@ -720,17 +719,26 @@ class _BarPlotter(_CategoricalStatPlotter):
                         title=self.plot_title,
                         tools = self.tools)
 
-
-            for j, hue_level in enumerate(self.hue_names):
-
-                # Draw the bars
-                offpos = barpos + self.hue_offsets[j] + .5 #.5 center alignment
-                bf.vbar(x=offpos,
-                        top=self.statistic[:, j],
-                        legend_label= hue_level,
-                        fill_color=conv_norm_rgb_to_bokeh_RGB(self.colors)[j],
-                        line_color=conv_norm_rgb_to_bokeh_RGB(self.colors)[j],
-                        width=self.nested_width)
+            if self.orient == "v":
+                for j, hue_level in enumerate(self.hue_names):
+                    # Draw the bars
+                    offpos = barpos + self.hue_offsets[j] + .5 #.5 center alignment
+                    bf.vbar(x=offpos,
+                            top=self.statistic[:, j],
+                            legend_label= hue_level,
+                            fill_color=conv_norm_rgb_to_bokeh_RGB(self.colors)[j],
+                            line_color=conv_norm_rgb_to_bokeh_RGB(self.colors)[j],
+                            width=self.nested_width)
+            elif self.orient == "h":
+                for j, hue_level in enumerate(self.hue_names):
+                    # Draw the bars
+                    offpos = barpos + self.hue_offsets[j] + .5 #.5 center alignment
+                    bf.hbar(y=offpos,
+                            right=self.statistic[:, j],
+                            legend_label= hue_level,
+                            fill_color=conv_norm_rgb_to_bokeh_RGB(self.colors)[j],
+                            line_color=conv_norm_rgb_to_bokeh_RGB(self.colors)[j],
+                            height=self.nested_width)
 
             bf.legend.click_policy = "hide"
 
