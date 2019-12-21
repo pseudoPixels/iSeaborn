@@ -753,7 +753,9 @@ class _BarPlotter(_CategoricalStatPlotter):
 
         bf = self.annotate_axes(bf)
 
-        show(bf)
+        # show(bf)
+
+        return bf
 
         # if self.orient == "h":
         #     ax.invert_yaxis()
