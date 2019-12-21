@@ -1,19 +1,8 @@
-bokehBorn: Interactive Statistical Data Visualization
-=====================================================
 
-
-
-
+.. title:: Home
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+  :maxdepth: 3
+  :name: Documentation
 
-   Tutorials <sections/tutorials/Categorical_Plots/categorical_plots>
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+  Tutorials <sections/tutorials/Categorical_Plots/categorical_plots>
