@@ -3,6 +3,6 @@
 
 .. toctree::
   :maxdepth: 3
-  :name: Documentation
+  :name: contents
 
   Tutorials <sections/tutorials/Categorical_Plots/categorical_plots>
