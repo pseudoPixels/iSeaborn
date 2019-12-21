@@ -11,4 +11,7 @@ iSeaborn Docs
 .. raw:: html
    :file: ../_static/test.html
 
+.. raw:: html
+   :file: ../_static/basicBarPlot.html
+
 Here
