@@ -6,12 +6,6 @@ iSeaborn Docs
 .. toctree::
   :maxdepth: 2
 
+  Gallery <sections/gallery/index>
   Tutorials <sections/tutorials/Categorical_Plots/categorical_plots>
 
-.. raw:: html
-   :file: ../_static/test.html
-
-.. raw:: html
-   :file: ../_static/basicBarPlot.html
-
-Here
