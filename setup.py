@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-DISTNAME = 'bokehBorn'
+DISTNAME = 'iSeaborn'
 MAINTAINER = 'Golam Mostaeen'
 MAINTAINER_EMAIL = 'golammostaeen@gmail.com'
 URL = 'https://bokehborn.readthedocs.io/en/latest/'
@@ -16,10 +16,10 @@ INSTALL_REQUIRES = [
 ]
 
 PACKAGES = [
-    'bokehBorn',
-    'bokehBorn.colors',
-    'bokehBorn.external',
-    'bokehBorn.tests',
+    'iSeaborn',
+    'iSeaborn.colors',
+    'iSeaborn.external',
+    'iSeaborn.tests',
 ]
 
 CLASSIFIERS = [

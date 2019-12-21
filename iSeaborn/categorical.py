@@ -26,7 +26,7 @@ from .utils import iqr, categorical_order, remove_na
 from .algorithms import bootstrap
 from .palettes import color_palette, husl_palette, light_palette, dark_palette
 
-from bokehBorn.utils import conv_norm_rgb_to_bokeh_RGB
+from iSeaborn.utils import conv_norm_rgb_to_bokeh_RGB
 
 
 
@@ -774,6 +774,6 @@ def barplot(x=None, y=None, hue=None, data=None, order=None, hue_order=None,
                           orient, color, palette, saturation,
                           errcolor, errwidth, capsize, dodge, plot_width, plot_height, plot_title, tools)
 
-    plotter.plot(kwargs)
+    bokehFigure = plotter.plot(kwargs)
     return bokehFigure
 
