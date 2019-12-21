@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'seabornInt'
+project = 'iSeaborn'
 copyright = '2019, Golam Mostaeen'
 author = 'Golam Mostaeen'
 
