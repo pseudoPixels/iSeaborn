@@ -137,3 +137,100 @@ Use a different color palette for the bars:
 
 .. raw:: html
    :file: ../../../_static/outputs_interactive_plots/chooseFromColorPalletes.html
+
+
+Set Specific Color
+---------------------------
+Plot all bars in a single color:
+
+.. code-block:: python
+   :linenos:
+   :emphasize-lines: 5
+
+   import iSeaborn as isn
+   from bokeh.plotting import output_file, save
+
+   tips = isn.load_dataset("tips")
+   fig = isn.barplot(x= "day", y="total_bill", data=tips, color="salmon")
+
+   output_file("setPrefferedColor.html")
+   save(fig)
+
+
+.. raw:: html
+   :file: ../../../_static/outputs_interactive_plots/setPrefferedColor.html
+
+
+Use Hue for Visualization
+---------------------------
+Draw a set of vertical bars with nested grouping by a two variables:
+
+.. note:: Click the legend text to view only a selected category.
+
+.. code-block:: python
+   :linenos:
+   :emphasize-lines: 5
+
+   import iSeaborn as isn
+   from bokeh.plotting import output_file, save
+
+   tips = isn.load_dataset("tips")
+   fig = isn.barplot(x="day", y="total_bill", hue="sex", data=tips)
+
+   output_file("useHue.html")
+   save(fig)
+
+
+
+.. raw:: html
+   :file: ../../../_static/outputs_interactive_plots/useHue.html
+
+
+Change Plot Properties
+---------------------------
+Change different plot properties:
+
+.. code-block:: python
+   :linenos:
+   :emphasize-lines: 5,6,7
+
+   import iSeaborn as isn
+   from bokeh.plotting import output_file, save
+
+   tips = isn.load_dataset("tips")
+   fig = isn.barplot(x="day", y="total_bill", data=tips,
+                     plot_width=600, plot_height=200,
+                     plot_title="Awesome Plot Title")
+
+   output_file("setPlotProps.html")
+   save(fig)
+
+
+
+.. raw:: html
+   :file: ../../../_static/outputs_interactive_plots/setPlotProps.html
+
+
+And More
+---------------------------
+Change the other aesthetics of the plot as key word arguments as available in `bokeh.plotting.figure.vbar` , such as changing alpha of the plot.
+
+.. note:: List of all the aesthetics properties :: https://docs.bokeh.org/en/latest/docs/reference/plotting.html#bokeh.plotting.figure.Figure.vbar
+
+.. code-block:: python
+   :linenos:
+   :emphasize-lines: 5
+
+   import iSeaborn as isn
+   from bokeh.plotting import output_file, save
+
+   tips = isn.load_dataset("tips")
+   fig = isn.barplot(x="day", y="total_bill", data=tips, alpha=0.3)
+
+   output_file("vbarProps.html")
+   save(fig)
+
+
+
+.. raw:: html
+   :file: ../../../_static/outputs_interactive_plots/vbarProps.html
