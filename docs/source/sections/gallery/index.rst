@@ -46,6 +46,28 @@ Default tools are "pan,box_select,wheel_zoom,box_zoom,reset,save"
    :file: ../../../_static/outputs_interactive_plots/chooseInteractiveTools.html
 
 
+
+Control Plot Orders
+-------------------
+Control bar order by passing an explicit order:
+
+.. code-block:: python
+   :linenos:
+   :emphasize-lines: 5
+
+   import iSeaborn as isn
+   from bokeh.plotting import output_file, save
+
+   tips = isn.load_dataset("tips")
+   fig = isn.barplot(x="time", y="tip", data=tips,order=["Lunch", "Dinner"])
+
+   output_file("chooseInteractiveTools.html")
+   save(fig)
+
+.. raw:: html
+   :file: ../../../_static/outputs_interactive_plots/controlPlotOrders.html
+
+
 Draw Horizontal Bar
 -------------------
 Draw a set of horizontal bars automatically with change of axis.
@@ -66,4 +88,5 @@ Draw a set of horizontal bars automatically with change of axis.
 
 .. raw:: html
    :file: ../../../_static/outputs_interactive_plots/horizontalBar.html
+
 
