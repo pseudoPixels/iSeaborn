@@ -6,6 +6,7 @@ iSeaborn Docs
 .. toctree::
   :maxdepth: 3
 
-  Gallery <sections/gallery/index>
-  Tutorials <sections/tutorials/Categorical_Plots/categorical_plots>
+  Installation <sections/installation/install>
+  Tutorials <sections/tutorials/index>
+  Community <sections/community/community>
 
