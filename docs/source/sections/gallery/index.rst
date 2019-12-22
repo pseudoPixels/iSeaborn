@@ -1,5 +1,8 @@
-iSeaborn Gallery
-================
+Tutorial
+========
+
+Bar Plots
+#########
 
 Vertical Bar Plot
 -----------------
@@ -90,3 +93,47 @@ Draw a set of horizontal bars automatically with change of axis.
    :file: ../../../_static/outputs_interactive_plots/horizontalBar.html
 
 
+Set Desired Estimator
+---------------------
+For example, use median as the estimate of central tendency
+
+.. code-block:: python
+   :linenos:
+   :emphasize-lines: 3, 6
+
+   import iSeaborn as isn
+   from bokeh.plotting import output_file, save
+   from numpy import median
+
+   tips = isn.load_dataset("tips")
+   fig = isn.barplot(x="day", y="tip", data=tips, estimator=median)
+
+   output_file("setDesiredEstimator.html")
+   save(fig)
+
+
+.. raw:: html
+   :file: ../../../_static/outputs_interactive_plots/setDesiredEstimator.html
+
+
+
+Choose From Color Palettes
+---------------------------
+Use a different color palette for the bars:
+
+.. code-block:: python
+   :linenos:
+   :emphasize-lines: 5
+
+   import iSeaborn as isn
+   from bokeh.plotting import output_file, save
+
+   tips = isn.load_dataset("tips")
+   fig = isn.barplot(x= "day", y="total_bill", data=tips, palette="Blues_d")
+
+   output_file("chooseFromColorPalletes.html")
+   save(fig)
+
+
+.. raw:: html
+   :file: ../../../_static/outputs_interactive_plots/chooseFromColorPalletes.html
