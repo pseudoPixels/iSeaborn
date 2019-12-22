@@ -3,9 +3,9 @@ from setuptools import setup, find_packages
 DISTNAME = 'iSeaborn'
 MAINTAINER = 'Golam Mostaeen'
 MAINTAINER_EMAIL = 'golammostaeen@gmail.com'
-URL = 'https://bokehborn.readthedocs.io/en/latest/'
+URL = 'https://iseaborn.readthedocs.io/en/latest/'
 LICENSE = 'BSD (3-clause)'
-DOWNLOAD_URL = 'https://github.com/pseudoPixels/bokehBorn'
+DOWNLOAD_URL = 'https://github.com/pseudoPixels/iSeaborn'
 VERSION = '0.0.1.dev'
 
 INSTALL_REQUIRES = [
@@ -53,6 +53,7 @@ setup(
         url=URL,
         version=VERSION,
         download_url=DOWNLOAD_URL,
+        include_package_data=True,
         install_requires=INSTALL_REQUIRES,
         packages=find_packages(),
         classifiers=CLASSIFIERS
